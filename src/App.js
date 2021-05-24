@@ -24,6 +24,7 @@ function App() {
 
   const [user, setUser] = useState(()=>auth.currentUser);
   const [initializing, setInitializing] = useState(true);
+  const [nickName, setNickName] = useState("");
 
   useEffect(()=>{
     const unsubscribe = auth.onAuthStateChanged(user=>{
@@ -42,13 +43,21 @@ function App() {
   })
 
   const signInWithGoogle = async()=>{
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.useDeviceLanguage();
-    try{
-      await auth.signInWithPopup(provider);
-    }catch(e){
-      console.error(e)
-    }
+    // const provider = new firebase.auth.GoogleAuthProvider();
+    // auth.useDeviceLanguage();
+    // try{
+    //   await auth.signInWithPopup(provider);
+    // }catch(e){
+    //   console.error(e)
+    // }
+
+    firebase.auth().signInAnonymously()
+      .then(() => {
+        console.log(nickName)
+      })
+      .catch((error) => {
+        console.log(error)
+      });    
   }
   
   if (initializing) return "Loading ..."
@@ -61,15 +70,26 @@ function App() {
     }
   }
 
+  const handleNameChange = e =>{
+    console.log(e.target.value)
+    setNickName(e.target.value);
+}
+
  return (
    <div>
      {user ? (
        <>
        <Button onClick={signOut}> Sign Out</Button>
-       <Channel user={user} db={db}/>
+       <Channel user={user} db={db} nickname={nickName}/>
        </>
      ):(
-       <Button onClick={signInWithGoogle}> SIgn in with Google </Button>
+       <>
+       <input onChange={handleNameChange} placeholder="Nickname"/> 
+       <p/>
+       <Button onClick={signInWithGoogle}> Sign in with Anonymously </Button>
+  
+
+       </>
      )}
 
    </div>
