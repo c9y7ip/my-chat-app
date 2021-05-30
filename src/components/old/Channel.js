@@ -35,7 +35,8 @@ const Channel = ({user=null, db=null, nickname="SomeGuy"})=>{
     const hadnleOnSubmit = e => {
         e.preventDefault();
 
-        if(db){
+        if(db)
+        {
             db.collection('messages').add({
                 text:newMessage,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),

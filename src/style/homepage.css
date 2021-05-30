@@ -1,0 +1,54 @@
+.grid {
+  background-color: blanchedalmond;
+  height: 80vh;
+  margin: 10vh 10vh 0vh 10vh;
+  border-radius: 15%;
+}
+
+.text {
+  text-align: center;
+  vertical-align: middle;
+  line-height: 80vh;
+}
+
+.addButton {
+  height: 100%;
+}
+
+.card-wrapper {
+  padding-top: 1vh;
+  padding-left: 25%;
+}
+
+.card {
+  align-items: center;
+  border-radius: 25px;
+  width: 20vw;
+  height: 10vh;
+}
+
+.cardSubTitle {
+  padding-top: 10px;
+  padding-left: 20px;
+}
+
+.cardBody {
+  padding-top: 0.5rem;
+}
+
+.cardButton {
+  width: 10vh;
+  padding: 0 0 2px 0px;
+  margin-left: 10px;
+  border: 0;
+}
+
+.room-profile {
+  text-align: center;
+  vertical-align: middle;
+  height: 80vh;
+}
+
+.room-input {
+  padding-top: 20vh;
+}
