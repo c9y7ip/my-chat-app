@@ -52,3 +52,37 @@
 .room-input {
   padding-top: 20vh;
 }
+
+.topNav {
+  display: inline-block;
+  width: 80%;
+  margin-top: 5%;
+  margin-left: 10%;
+  border: 3px solid #bbb;
+  border-radius: 10px;
+}
+
+.topNav-header-2 {
+  float: right;
+}
+
+.InputBar {
+  width: 80%;
+  margin-left: 10%;
+}
+
+.sendButton {
+  float: right;
+}
+
+.input {
+  width: 60%;
+  margin-left: 10%;
+}
+
+.chatRoom {
+  height: 70%;
+  width: 80%;
+  margin-left: 10%;
+  border: 3px solid #bbb;
+}
