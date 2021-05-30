@@ -49,7 +49,7 @@ function Homepage() {
 
     const messageUnsub = db
       .collection("messages")
-      .orderBy("createdAt")
+      .orderBy("createdAt", "asc")
       .onSnapshot((querySnapshot) => {
         const message = querySnapshot.docs.map((doc) => ({
           ...doc.data(),
