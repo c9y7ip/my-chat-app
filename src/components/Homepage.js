@@ -38,26 +38,26 @@ function Homepage() {
       }
     });
 
-    const chatRooUnsub = db
-      .collection("chat-room-list")
-      .orderBy("createdAt")
-      .onSnapshot((querySnapshot) => {
-        const chatRoom = querySnapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        setChatRoomList(chatRoom);
-        // console.log(chatRoom);
-      });
-
-    const messageUnsub = db.collection("messages").onSnapshot((querySnapshot) => {
-      const message = querySnapshot.docs.map((doc) => ({
+    const chatRooUnsub = db.collection("chat-room-list").onSnapshot((querySnapshot) => {
+      const chatRoom = querySnapshot.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
       }));
-      setMessageList(message);
-      // console.log(message);
+      setChatRoomList(chatRoom);
+      // console.log(chatRoom);
     });
+
+    const messageUnsub = db
+      .collection("messages")
+      .orderBy("createdAt")
+      .onSnapshot((querySnapshot) => {
+        const message = querySnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setMessageList(message);
+        // console.log(message);
+      });
 
     return chatRooUnsub, messageUnsub, userUnsub;
   }, [db, user]);
