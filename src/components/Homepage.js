@@ -21,6 +21,7 @@ function Homepage() {
   const [createCheck, setCreateCheck] = useState(false);
   const [message, setMessage] = useState("");
   const [title, setTitle] = useState("");
+  const [member, setMember] = useState(0);
   const [capacity, setCapacity] = useState(0);
   const [nickname, setNickname] = useState("");
   const [user, setUser] = useState("");
@@ -48,7 +49,7 @@ function Homepage() {
     });
 
     const messageUnsub = db
-      .collection("messages")
+      .collection({ user }.user + "-chat-room-list")
       .orderBy("createdAt", "asc")
       .onSnapshot((querySnapshot) => {
         const message = querySnapshot.docs.map((doc) => ({
@@ -66,13 +67,22 @@ function Homepage() {
     signIn();
 
     console.log("creating...");
+    console.log();
     if (db) {
       db.collection("chat-room-list").add({
         Title: title,
         Capacity: capacity,
         Owner: user,
+        Member: member + 1,
       });
     }
+    db.collection({ user }.user + "-chat-room-list")
+      .doc("private-message-meta")
+      .set({
+        Owner: user,
+        Nickname: nickname,
+      });
+
     setCreateCheck(true);
   };
 
@@ -101,7 +111,7 @@ function Homepage() {
   const handleOnSubmitMessage = (e) => {
     e.preventDefault();
     if (db) {
-      db.collection("messages").add({
+      db.collection({ user }.user + "-chat-room-list").add({
         text: message,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         displayName: nickname,
@@ -205,7 +215,12 @@ function Homepage() {
         <Col>
           <div className="grid">
             {chatRoomList.map((room) => (
-              <Chatroom id={room.Owner} Title={room.Title} Capacity={room.Capacity} />
+              <Chatroom
+                RoomId={room.id}
+                Title={room.Title}
+                Capacity={room.Capacity}
+                Member={room.Member}
+              />
             ))}
           </div>
         </Col>

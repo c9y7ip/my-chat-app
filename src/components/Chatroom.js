@@ -4,7 +4,7 @@ import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
-const Chatroom = ({ id = "null", Title = "aloha", Capacity = "0" }) => {
+const Chatroom = ({ RoomId = "null", Title = "aloha", Capacity = "0", Member = "0" }) => {
   const [nickName, setNickName] = useState("");
 
   const setUpName = () => {
@@ -34,10 +34,11 @@ const Chatroom = ({ id = "null", Title = "aloha", Capacity = "0" }) => {
         <Card.Subtitle className="cardSubTitle">{Title}</Card.Subtitle>
         <Card.Body className="cardBody">
           <p className="cardCapacity">
-            Capacity # 0/{Capacity}
+            Capacity # {Member}/{Capacity}
             <Button onClick={setUpName} className="cardButton" variant="priamry">
               Join
             </Button>
+            <p>{RoomId}</p>
           </p>
         </Card.Body>
       </Card>
