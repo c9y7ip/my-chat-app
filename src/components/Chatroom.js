@@ -15,12 +15,13 @@ const Chatroom = ({
   setCapacity = 0,
   setMember = 0,
   setRoomOnwer = {},
+  setGuestName = {},
 }) => {
   const [nickName, setNickName] = useState("123");
 
   const setUpName = () => {
     const enterName = prompt("Enter your nickname");
-    setNickName(enterName);
+    setGuestName(enterName);
     joinChatRoom();
   };
 

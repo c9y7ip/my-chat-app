@@ -26,6 +26,7 @@ function Homepage() {
   const [member, setMember] = useState(0);
   const [capacity, setCapacity] = useState(0);
   const [nickname, setNickname] = useState("");
+  const [guestName, setGuestName] = useState("");
   const [user, setUser] = useState("");
   const [chatRoomList, setChatRoomList] = useState([]);
   const [messageList, setMessageList] = useState([]);
@@ -149,6 +150,7 @@ function Homepage() {
                 member={member}
                 messageList={messageList}
                 roomOnwer={roomOnwer}
+                guestName={guestName}
               />
             ) : !switches ? (
               <Box className="addButton" display="flex" justifyContent="center" alignItems="center">
@@ -207,6 +209,7 @@ function Homepage() {
                 setCapacity={setCapacity}
                 setMember={setMember}
                 setRoomOnwer={setRoomOnwer}
+                setGuestName={setGuestName}
               />
             ))}
           </div>

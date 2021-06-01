@@ -21,6 +21,7 @@ const RoomMessage = ({
   member = 0,
   messageList = [],
   roomOnwer = "",
+  guestName = { guestName },
 }) => {
   const db = firebase.firestore();
 
@@ -63,7 +64,7 @@ const RoomMessage = ({
       </div>
       <div className="chatRoom">
         {messageList.map((message) => (
-          <Message {...message} displayName={nickname} />
+          <Message {...message} displayName={nickname} guestName={guestName} />
         ))}
       </div>
       <div className="InputBar">
