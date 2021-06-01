@@ -78,6 +78,7 @@ function Homepage() {
         Member: member + 1,
       });
     }
+
     db.collection({ user }.user + "-chat-room-list")
       .doc("private-message-meta")
       .set({
@@ -179,7 +180,7 @@ function Homepage() {
                 Title={room.Title}
                 Capacity={room.Capacity}
                 Member={room.Member}
-                Owner={room.Owner}
+                Owner={user}
                 setCreateCheck={setCreateCheck}
                 setTitle={setTitle}
                 setCapacity={setCapacity}
