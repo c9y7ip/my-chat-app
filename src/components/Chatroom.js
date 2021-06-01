@@ -25,7 +25,7 @@ const Chatroom = ({
   };
 
   const joinChatRoom = () => {
-    console.log(Owner);
+    console.log("Room Onwer" + Owner);
     confirmAlert({
       title: "You want to join this room? Using name " + nickName,
 

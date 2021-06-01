@@ -27,10 +27,11 @@ const RoomMessage = ({
   const [message, setMessage] = useState("");
 
   const handleOnSubmitMessage = (e) => {
-    console.log("sending to ...." + user);
     e.preventDefault();
     if (db) {
-      if (roomOnwer != "") {
+      if (roomOnwer == "") {
+        console.log("sending to ...." + user);
+
         db.collection(user + "-chat-room-list").add({
           text: message,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -38,6 +39,8 @@ const RoomMessage = ({
           user: user,
         });
       } else {
+        console.log("sending to ...." + roomOnwer);
+
         db.collection(roomOnwer + "-chat-room-list").add({
           text: message,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
