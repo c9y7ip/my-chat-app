@@ -14,7 +14,7 @@ const Chatroom = ({
   setTitle = {},
   setCapacity = 0,
   setMember = 0,
-  setRoomOnwer = "",
+  setRoomOnwer = {},
 }) => {
   const [nickName, setNickName] = useState("123");
 
@@ -25,6 +25,7 @@ const Chatroom = ({
   };
 
   const joinChatRoom = () => {
+    console.log(Owner);
     confirmAlert({
       title: "You want to join this room? Using name " + nickName,
 

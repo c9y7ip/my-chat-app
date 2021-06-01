@@ -27,9 +27,10 @@ const RoomMessage = ({
   const [message, setMessage] = useState("");
 
   const handleOnSubmitMessage = (e) => {
+    console.log("sending to ...." + roomOnwer);
     e.preventDefault();
     if (db) {
-      db.collection({ roomOnwer } + "-chat-room-list").add({
+      db.collection(roomOnwer + "-chat-room-list").add({
         text: message,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         displayName: nickname,
