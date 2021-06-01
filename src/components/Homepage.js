@@ -55,7 +55,7 @@ function Homepage() {
     console.log("Getting from..." + user + " this is user");
 
     const messageUnsub = db
-      .collection(user + "-chat-room-list")
+      .collection(roomOnwer + "-chat-room-list")
       .orderBy("createdAt", "asc")
       .onSnapshot((querySnapshot) => {
         const message = querySnapshot.docs.map((doc) => ({
