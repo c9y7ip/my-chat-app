@@ -2,10 +2,10 @@ import React from "react";
 import { formatRelative } from "date-fns";
 import { ChatBox } from "react-chatbox-component";
 
-const Message = ({ createdAt = null, text = "", displayName = "", guestName = "" }) => {
+const Message = ({ text = {}, name = "" }) => {
   return (
     <div>
-      【{displayName}/{guestName}】{text}
+      【{name}】{text}
     </div>
   );
 };
