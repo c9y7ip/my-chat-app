@@ -50,9 +50,11 @@ function Homepage() {
       setChatRoomList(chatRoom);
       // console.log(chatRoom);
     });
+
     console.log("Getting from..." + roomOnwer);
+
     const messageUnsub = db
-      .collection(roomOnwer + "-chat-room-list")
+      .collection(user + "-chat-room-list")
       .orderBy("createdAt", "asc")
       .onSnapshot((querySnapshot) => {
         const message = querySnapshot.docs.map((doc) => ({
