@@ -36,7 +36,7 @@ const RoomMessage = ({
         db.collection(user + "-chat-room-list").add({
           text: message,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          displayName: guestName,
+          displayName: nickname,
           user: user,
         });
       } else {
@@ -45,7 +45,7 @@ const RoomMessage = ({
         db.collection(roomOnwer + "-chat-room-list").add({
           text: message,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          displayName: nickname,
+          displayName: guestName,
           user: user,
         });
       }
