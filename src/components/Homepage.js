@@ -51,7 +51,8 @@ function Homepage() {
       // console.log(chatRoom);
     });
 
-    console.log("Getting from..." + roomOnwer);
+    console.log("Getting from..." + roomOnwer + "this is roomOwner");
+    console.log("Getting from..." + user + "this is user");
 
     const messageUnsub = db
       .collection(user + "-chat-room-list")
