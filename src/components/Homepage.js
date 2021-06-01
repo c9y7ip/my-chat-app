@@ -66,21 +66,21 @@ function Homepage() {
           setMessageList(message);
           // console.log(message);
         });
-    }else{
+      return chatRooUnsub, messageUnsub, userUnsub;
+    } else {
       const messageUnsub = db
-      .collection(roomOnwer + "-chat-room-list")
-      .orderBy("createdAt", "asc")
-      .onSnapshot((querySnapshot) => {
-        const message = querySnapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        setMessageList(message);
-        // console.log(message);
+        .collection(roomOnwer + "-chat-room-list")
+        .orderBy("createdAt", "asc")
+        .onSnapshot((querySnapshot) => {
+          const message = querySnapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
+          setMessageList(message);
+          // console.log(message);
+        });
+      return chatRooUnsub, messageUnsub, userUnsub;
     }
-  }
-
-    return chatRooUnsub, messageUnsub, userUnsub;
   }, [db, roomOnwer, user]);
 
   const roomCreate = async () => {
