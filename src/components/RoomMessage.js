@@ -30,7 +30,7 @@ const RoomMessage = ({
     console.log("sending to ...." + user);
     e.preventDefault();
     if (db) {
-      db.collection(roomOnwer + "-chat-room-list").add({
+      db.collection(user + "-chat-room-list").add({
         text: message,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         displayName: nickname,
