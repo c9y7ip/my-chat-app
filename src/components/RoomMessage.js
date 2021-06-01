@@ -30,12 +30,21 @@ const RoomMessage = ({
     console.log("sending to ...." + user);
     e.preventDefault();
     if (db) {
-      db.collection(user + "-chat-room-list").add({
-        text: message,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        displayName: nickname,
-        user: user,
-      });
+      if (roomOnwer != "") {
+        db.collection(user + "-chat-room-list").add({
+          text: message,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          displayName: nickname,
+          user: user,
+        });
+      } else {
+        db.collection(roomOnwer + "-chat-room-list").add({
+          text: message,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          displayName: nickname,
+          user: user,
+        });
+      }
     }
   };
 
