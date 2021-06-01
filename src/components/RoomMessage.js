@@ -21,7 +21,7 @@ const RoomMessage = ({
   member = 0,
   messageList = [],
   roomOnwer = "",
-  guestName = { guestName },
+  guestName = "",
 }) => {
   const db = firebase.firestore();
 
