@@ -54,7 +54,20 @@ function Homepage() {
     console.log("Getting from..." + roomOnwer + " this is roomOwner");
     console.log("Getting from..." + user + " this is user");
 
-    const messageUnsub = db
+    if (roomOnwer == "") {
+      const messageUnsub = db
+        .collection(user + "-chat-room-list")
+        .orderBy("createdAt", "asc")
+        .onSnapshot((querySnapshot) => {
+          const message = querySnapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
+          setMessageList(message);
+          // console.log(message);
+        });
+    }else{
+      const messageUnsub = db
       .collection(roomOnwer + "-chat-room-list")
       .orderBy("createdAt", "asc")
       .onSnapshot((querySnapshot) => {
@@ -64,7 +77,7 @@ function Homepage() {
         }));
         setMessageList(message);
         // console.log(message);
-      });
+    }
 
     return chatRooUnsub, messageUnsub, userUnsub;
   }, [db, roomOnwer, user]);
