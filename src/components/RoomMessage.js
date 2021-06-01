@@ -63,7 +63,7 @@ const RoomMessage = ({
       </div>
       <div className="chatRoom">
         {messageList.map((message) => (
-          <Message {...message} />
+          <Message {...message} displayName={nickname} />
         ))}
       </div>
       <div className="InputBar">
