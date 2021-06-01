@@ -52,7 +52,7 @@ function Homepage() {
     });
 
     const messageUnsub = db
-      .collection(roomOnwer + "-chat-room-list")
+      .collection({ roomOnwer } + "-chat-room-list")
       .orderBy("createdAt", "asc")
       .onSnapshot((querySnapshot) => {
         const message = querySnapshot.docs.map((doc) => ({
@@ -80,7 +80,7 @@ function Homepage() {
       });
     }
 
-    db.collection(roomOnwer + "-chat-room-list")
+    db.collection({ roomOnwer } + "-chat-room-list")
       .doc("private-message-meta")
       .set({
         Owner: user,
