@@ -12,6 +12,8 @@ import "firebase/auth";
 import "firebase/firestore";
 import ReactScrollableList from "react-scrollable-list";
 import Message from "./old/Message";
+import RoomMessage from "./RoomMessage";
+import { CompassCalibrationOutlined } from "@material-ui/icons";
 
 function Homepage() {
   const auth = firebase.auth();
@@ -108,28 +110,8 @@ function Homepage() {
     });
   };
 
-  const handleOnSubmitMessage = (e) => {
-    e.preventDefault();
-    if (db) {
-      db.collection({ user }.user + "-chat-room-list").add({
-        text: message,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        displayName: nickname,
-        user: user,
-      });
-    }
-  };
-
   const signIn = async () => {
-    firebase
-      .auth()
-      .signInAnonymously()
-      .then(() => {
-        console.log(user + "<<<<<<<<<");
-      })
-      .catch((error) => {
-        console.log(error + "<-------");
-      });
+    firebase.auth().signInAnonymously();
   };
 
   return (
@@ -138,37 +120,14 @@ function Homepage() {
         <Col>
           <div className="grid">
             {createCheck ? (
-              <>
-                <div className="topNav">
-                  <h5 className="topNav-header-1">
-                    {title} <span className="topNav-header-2">{capacity}</span>
-                  </h5>
-                </div>
-                <div className="chatRoom">
-                  {messageList.map((message) => (
-                    <Message {...message} />
-                  ))}
-                </div>
-                <div className="InputBar">
-                  <button type="button" className="btn btn-danger btn-sm">
-                    Leave
-                  </button>
-                  <input
-                    className="input"
-                    onChange={(e) => {
-                      setMessage(e.target.value);
-                      console.log(message);
-                    }}
-                  ></input>
-                  <button
-                    type="button"
-                    className="btn btn-success btn-sm sendButton"
-                    onClick={handleOnSubmitMessage}
-                  >
-                    Send
-                  </button>
-                </div>
-              </>
+              <RoomMessage
+                user={user}
+                nickname={nickname}
+                title={title}
+                capacity={capacity}
+                member={member}
+                messageList={messageList}
+              />
             ) : !switches ? (
               <Box className="addButton" display="flex" justifyContent="center" alignItems="center">
                 <Fab aria-label="add" color="primary" onClick={() => setSwitches(true)}>
@@ -220,6 +179,10 @@ function Homepage() {
                 Title={room.Title}
                 Capacity={room.Capacity}
                 Member={room.Member}
+                setCreateCheck={setCreateCheck}
+                setTitle={setTitle}
+                setCapacity={setCapacity}
+                setMember={setMember}
               />
             ))}
           </div>

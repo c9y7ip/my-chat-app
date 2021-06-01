@@ -4,8 +4,17 @@ import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
-const Chatroom = ({ RoomId = "null", Title = "aloha", Capacity = "0", Member = "0" }) => {
-  const [nickName, setNickName] = useState("");
+const Chatroom = ({
+  RoomId = "null",
+  Title = "aloha",
+  Capacity = "0",
+  Member = "0",
+  setCreateCheck = {},
+  setTitle = {},
+  setCapacity = 0,
+  setMember = 0,
+}) => {
+  const [nickName, setNickName] = useState("123");
 
   const setUpName = () => {
     const enterName = prompt("Enter your nickname");
@@ -23,6 +32,12 @@ const Chatroom = ({ RoomId = "null", Title = "aloha", Capacity = "0", Member = "
         },
         {
           label: "Yes",
+          onClick: () => {
+            setCreateCheck(true);
+            setTitle(Title);
+            setCapacity(Capacity);
+            setMember(Member);
+          },
         },
       ],
     });
@@ -38,7 +53,7 @@ const Chatroom = ({ RoomId = "null", Title = "aloha", Capacity = "0", Member = "
             <Button onClick={setUpName} className="cardButton" variant="priamry">
               Join
             </Button>
-            <p>{RoomId}</p>
+            {/* <p>{RoomId}</p> */}
           </p>
         </Card.Body>
       </Card>
