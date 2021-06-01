@@ -27,7 +27,7 @@ const RoomMessage = ({
   const [message, setMessage] = useState("");
 
   const handleOnSubmitMessage = (e) => {
-    console.log("sending to ...." + roomOnwer);
+    console.log("sending to ...." + user);
     e.preventDefault();
     if (db) {
       db.collection(roomOnwer + "-chat-room-list").add({
