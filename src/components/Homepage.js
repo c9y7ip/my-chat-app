@@ -78,6 +78,7 @@ function Homepage() {
         setMessageList(message);
         // console.log(message);
     }
+  }
 
     return chatRooUnsub, messageUnsub, userUnsub;
   }, [db, roomOnwer, user]);
