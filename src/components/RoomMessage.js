@@ -62,7 +62,7 @@ const RoomMessage = ({
           className="input"
           onChange={(e) => {
             setMessage(e.target.value);
-            console.log(message);
+            // console.log(message);
           }}
         ></input>
         <button

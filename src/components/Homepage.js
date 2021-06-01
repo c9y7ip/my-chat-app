@@ -35,7 +35,7 @@ function Homepage() {
     const userUnsub = auth.onAuthStateChanged((firebaseUser) => {
       if (firebaseUser) {
         setUser(firebaseUser.uid);
-        console.log(user);
+        console.log("Login in as " + user);
       } else {
         setUser(null);
         console.log(user);
@@ -89,6 +89,8 @@ function Homepage() {
         Owner: user,
         Nickname: nickname,
       });
+
+    console.log("Finished, Owner = " + user);
 
     setCreateCheck(true);
   };
