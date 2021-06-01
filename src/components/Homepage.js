@@ -179,10 +179,12 @@ function Homepage() {
                 Title={room.Title}
                 Capacity={room.Capacity}
                 Member={room.Member}
+                Owner={room.Owner}
                 setCreateCheck={setCreateCheck}
                 setTitle={setTitle}
                 setCapacity={setCapacity}
                 setMember={setMember}
+                setUser={setUser}
               />
             ))}
           </div>

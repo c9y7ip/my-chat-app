@@ -6,6 +6,7 @@ import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 const Chatroom = ({
   RoomId = "null",
+  Owner = "",
   Title = "aloha",
   Capacity = "0",
   Member = "0",
@@ -13,6 +14,7 @@ const Chatroom = ({
   setTitle = {},
   setCapacity = 0,
   setMember = 0,
+  setUser = "",
 }) => {
   const [nickName, setNickName] = useState("123");
 
@@ -37,6 +39,7 @@ const Chatroom = ({
             setTitle(Title);
             setCapacity(Capacity);
             setMember(Member);
+            setUser(Owner);
           },
         },
       ],
