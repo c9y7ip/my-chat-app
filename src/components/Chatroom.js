@@ -14,7 +14,7 @@ const Chatroom = ({
   setTitle = {},
   setCapacity = 0,
   setMember = 0,
-  setUser = "",
+  setRoomOnwer = "",
 }) => {
   const [nickName, setNickName] = useState("123");
 
@@ -39,7 +39,7 @@ const Chatroom = ({
             setTitle(Title);
             setCapacity(Capacity);
             setMember(Member);
-            setUser(Owner);
+            setRoomOnwer(Owner);
           },
         },
       ],

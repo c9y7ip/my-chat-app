@@ -20,6 +20,7 @@ const RoomMessage = ({
   capacity = 0,
   member = 0,
   messageList = [],
+  roomOnwer = "",
 }) => {
   const db = firebase.firestore();
 
@@ -28,7 +29,7 @@ const RoomMessage = ({
   const handleOnSubmitMessage = (e) => {
     e.preventDefault();
     if (db) {
-      db.collection({ user }.user + "-chat-room-list").add({
+      db.collection({ roomOnwer } + "-chat-room-list").add({
         text: message,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         displayName: nickname,

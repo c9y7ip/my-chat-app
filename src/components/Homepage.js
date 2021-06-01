@@ -29,6 +29,7 @@ function Homepage() {
   const [user, setUser] = useState("");
   const [chatRoomList, setChatRoomList] = useState([]);
   const [messageList, setMessageList] = useState([]);
+  const [roomOnwer, setRoomOnwer] = useState("");
 
   useEffect(() => {
     const userUnsub = auth.onAuthStateChanged((firebaseUser) => {
@@ -128,6 +129,7 @@ function Homepage() {
                 capacity={capacity}
                 member={member}
                 messageList={messageList}
+                roomOnwer={roomOnwer}
               />
             ) : !switches ? (
               <Box className="addButton" display="flex" justifyContent="center" alignItems="center">
@@ -180,12 +182,12 @@ function Homepage() {
                 Title={room.Title}
                 Capacity={room.Capacity}
                 Member={room.Member}
-                Owner={user}
+                Owner={room.Owner}
                 setCreateCheck={setCreateCheck}
                 setTitle={setTitle}
                 setCapacity={setCapacity}
                 setMember={setMember}
-                setUser={setUser}
+                setRoomOnwer={setRoomOnwer}
               />
             ))}
           </div>
