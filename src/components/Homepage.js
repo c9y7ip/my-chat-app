@@ -50,9 +50,9 @@ function Homepage() {
       setChatRoomList(chatRoom);
       // console.log(chatRoom);
     });
-
+    console.log("Getting from..." + roomOnwer);
     const messageUnsub = db
-      .collection({ roomOnwer } + "-chat-room-list")
+      .collection(roomOnwer + "-chat-room-list")
       .orderBy("createdAt", "asc")
       .onSnapshot((querySnapshot) => {
         const message = querySnapshot.docs.map((doc) => ({
@@ -64,7 +64,7 @@ function Homepage() {
       });
 
     return chatRooUnsub, messageUnsub, userUnsub;
-  }, [db, user]);
+  }, [db, roomOnwer, user]);
 
   const roomCreate = async () => {
     signIn();
@@ -80,7 +80,7 @@ function Homepage() {
       });
     }
 
-    db.collection({ roomOnwer } + "-chat-room-list")
+    db.collection(user + "-chat-room-list")
       .doc("private-message-meta")
       .set({
         Owner: user,
