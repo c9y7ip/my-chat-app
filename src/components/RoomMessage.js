@@ -12,6 +12,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import ReactScrollableList from "react-scrollable-list";
 import Message from "./old/Message";
+import ScrollableFeed from "react-scrollable-feed";
 
 const RoomMessage = ({
   user = "",
@@ -26,6 +27,15 @@ const RoomMessage = ({
   const db = firebase.firestore();
 
   const [message, setMessage] = useState("");
+
+  const signOut = async () => {
+    try {
+      await firebase.auth().signOut();
+      console.log("Sign Out!");
+    } catch (e) {
+      console.log(e.messsage);
+    }
+  };
 
   const handleOnSubmitMessage = (e) => {
     e.preventDefault();
@@ -63,14 +73,16 @@ const RoomMessage = ({
         </h5>
       </div>
       <div className="chatRoom">
-        {messageList.map((message) => (
-          <>
-            <Message {...message} name={{ ...message }.displayName} />
-          </>
-        ))}
+        <ScrollableFeed forceScroll="true" className="feed">
+          {messageList.map((message) => (
+            <>
+              <Message {...message} name={{ ...message }.displayName} />
+            </>
+          ))}
+        </ScrollableFeed>
       </div>
       <div className="InputBar">
-        <button type="button" className="btn btn-danger btn-sm">
+        <button type="button" className="btn btn-danger btn-sm" onCLick={signOut}>
           Leave
         </button>
         <input
