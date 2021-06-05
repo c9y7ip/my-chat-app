@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Button, Card, Col, Container, Row, label } from "react-bootstrap";
 import AddIcon from "@material-ui/icons/Add";
 import PersonIcon from "@material-ui/icons/Person";
-import homepage from "../style/homepage.css";
 import { Box, Fab, Grid } from "@material-ui/core";
 import Chatroom from "./Chatroom";
 import { confirmAlert } from "react-confirm-alert"; // Import
@@ -13,6 +12,7 @@ import "firebase/firestore";
 import ReactScrollableList from "react-scrollable-list";
 import Message from "./old/Message";
 import ScrollableFeed from "react-scrollable-feed";
+import "../style/homepage.css";
 
 const RoomMessage = ({
   user = "",
@@ -23,6 +23,8 @@ const RoomMessage = ({
   messageList = [],
   roomOnwer = "",
   guestName = "",
+  roomID = "",
+  setCreateCheck = {},
 }) => {
   const db = firebase.firestore();
 
@@ -30,10 +32,21 @@ const RoomMessage = ({
 
   const signOut = async () => {
     try {
+      await db.collection("chat-room-list").doc(roomID).delete();
+      setCreateCheck(false);
+      console.log("I want to delete " + user + "-chat-room");
+      await db
+        .collection(user + "-chat-room")
+        .get()
+        .then((res) => {
+          res.forEach((e) => {
+            e.ref.delete();
+          });
+        });
       await firebase.auth().signOut();
       console.log("Sign Out!");
     } catch (e) {
-      console.log(e.messsage);
+      console.log(e);
     }
   };
 
@@ -73,7 +86,7 @@ const RoomMessage = ({
         </h5>
       </div>
       <div className="chatRoom">
-        <ScrollableFeed forceScroll="true" className="feed">
+        <ScrollableFeed forceScroll="true" style={{ height: "100%" }}>
           {messageList.map((message) => (
             <>
               <Message {...message} name={{ ...message }.displayName} />
@@ -82,7 +95,7 @@ const RoomMessage = ({
         </ScrollableFeed>
       </div>
       <div className="InputBar">
-        <button type="button" className="btn btn-danger btn-sm" onCLick={signOut}>
+        <button type="button" className="btn btn-danger btn-sm" onClick={signOut}>
           Leave
         </button>
         <input

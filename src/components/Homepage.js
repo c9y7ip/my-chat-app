@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Card, Col, Container, Row, label } from "react-bootstrap";
 import AddIcon from "@material-ui/icons/Add";
 import PersonIcon from "@material-ui/icons/Person";
-import homepage from "../style/homepage.css";
+import "../style/homepage.css";
 import { Box, Fab, Grid } from "@material-ui/core";
 import Chatroom from "./Chatroom";
 import { confirmAlert } from "react-confirm-alert"; // Import
@@ -31,8 +31,11 @@ function Homepage() {
   const [chatRoomList, setChatRoomList] = useState([]);
   const [messageList, setMessageList] = useState([]);
   const [roomOnwer, setRoomOnwer] = useState("");
+  const [roomID, setRoomID] = useState("");
 
   useEffect(() => {
+    signIn();
+
     const userUnsub = auth.onAuthStateChanged((firebaseUser) => {
       if (firebaseUser) {
         setUser(firebaseUser.uid);
@@ -57,7 +60,7 @@ function Homepage() {
 
     if (roomOnwer == "") {
       const messageUnsub = db
-        .collection(user + "-chat-room-list")
+        .collection(user + "-chat-room")
         .orderBy("createdAt", "asc")
         .onSnapshot((querySnapshot) => {
           const message = querySnapshot.docs.map((doc) => ({
@@ -70,7 +73,7 @@ function Homepage() {
       return chatRooUnsub, messageUnsub, userUnsub;
     } else {
       const messageUnsub = db
-        .collection(roomOnwer + "-chat-room-list")
+        .collection(roomOnwer + "-chat-room")
         .orderBy("createdAt", "asc")
         .onSnapshot((querySnapshot) => {
           const message = querySnapshot.docs.map((doc) => ({
@@ -85,20 +88,23 @@ function Homepage() {
   }, [db, roomOnwer, user]);
 
   const roomCreate = async () => {
-    signIn();
-
     console.log("creating...");
     console.log();
     if (db) {
-      db.collection("chat-room-list").add({
-        Title: title,
-        Capacity: capacity,
-        Owner: user,
-        Member: member + 1,
-      });
+      db.collection("chat-room-list")
+        .add({
+          Title: title,
+          Capacity: capacity,
+          Owner: user,
+          Member: member + 1,
+        })
+        .then(function (doc) {
+          console.log("room ID = ", doc.id);
+          setRoomID(doc.id);
+        });
     }
 
-    db.collection(user + "-chat-room-list")
+    db.collection(user + "-chat-room")
       .doc("private-message-meta")
       .set({
         Owner: user,
@@ -151,6 +157,8 @@ function Homepage() {
                 messageList={messageList}
                 roomOnwer={roomOnwer}
                 guestName={guestName}
+                roomID={roomID}
+                setCreateCheck={setCreateCheck}
               />
             ) : !switches ? (
               <Box className="addButton" display="flex" justifyContent="center" alignItems="center">
