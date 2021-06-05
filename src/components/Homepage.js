@@ -55,10 +55,8 @@ function Homepage() {
       // console.log(chatRoom);
     });
 
-    console.log("Getting from..." + roomOnwer + " this is roomOwner");
-    console.log("Getting from..." + user + " this is user");
-
     if (roomOnwer == "") {
+      console.log("Getting from..." + user + " this is user");
       const messageUnsub = db
         .collection(user + "-chat-room")
         .orderBy("createdAt", "asc")
@@ -72,6 +70,7 @@ function Homepage() {
         });
       return chatRooUnsub, messageUnsub, userUnsub;
     } else {
+      console.log("Getting from..." + roomOnwer + " this is roomOwner");
       const messageUnsub = db
         .collection(roomOnwer + "-chat-room")
         .orderBy("createdAt", "asc")

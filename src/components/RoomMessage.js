@@ -43,7 +43,7 @@ const RoomMessage = ({
             e.ref.delete();
           });
         });
-      await firebase.auth().signOut();
+      // await firebase.auth().signOut();
       console.log("Sign Out!");
     } catch (e) {
       console.log(e);
