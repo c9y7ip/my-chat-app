@@ -13,14 +13,12 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 // firebase Import
 import "firebase/auth";
 import "firebase/firestore";
-import { HourglassEmpty } from "@material-ui/icons";
 
 const RoomMessage = ({
   user = "",
-  nickname = "",
+  hostName = "",
   title = "",
   capacity = 0,
-  messageList = [],
   roomOnwer = "",
   guestName = "",
   roomID = "",
@@ -29,20 +27,54 @@ const RoomMessage = ({
   const db = firebase.firestore();
   const [message, setMessage] = useState("");
   const [member, setMember] = useState(0);
+  const [messageList, setMessageList] = useState([]);
 
   useEffect(() => {
+    console.log("Guest Name = ", guestName);
+    console.log("Host Name = ", hostName);
+
+    //Update capacity
     const room = db
       .collection("chat-room-list")
       .doc(roomID)
-      .get("Member")
+      .get("member")
       .then(function (doc) {
         if (doc.exists) {
-          setMember(doc.data().Member);
+          setMember(doc.data().member);
         } else {
           setCreateCheck(false);
         }
       });
-  });
+
+    //Reading Message
+    if (roomOnwer === "") {
+      console.log("Getting from user ..." + user);
+      const messageUnsub = db
+        .collection(user + "-chat-room")
+        .orderBy("createdAt", "asc")
+        .onSnapshot((querySnapshot) => {
+          const message = querySnapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
+          setMessageList(message);
+        });
+      return [messageUnsub, room];
+    } else {
+      console.log("Getting from roomOwner..." + roomOnwer);
+      const messageUnsub = db
+        .collection(roomOnwer + "-chat-room")
+        .orderBy("createdAt", "asc")
+        .onSnapshot((querySnapshot) => {
+          const message = querySnapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
+          setMessageList(message);
+        });
+      return [messageUnsub, room];
+    }
+  }, [db, roomOnwer, user, roomID, setCreateCheck]);
 
   const signOut = async () => {
     try {
@@ -93,7 +125,7 @@ const RoomMessage = ({
         .collection("chat-room-list")
         .doc(roomID)
         .update({
-          Member: member - 1,
+          member: member - 1,
         });
     } catch (e) {
       console.log(e);
@@ -104,24 +136,24 @@ const RoomMessage = ({
     e.preventDefault();
     if (db) {
       // you are Host
-      if (roomOnwer === "") {
+      if (roomOnwer === user) {
         console.log("Sending to ...." + user);
 
         db.collection(user + "-chat-room").add({
-          Text: message,
-          CreatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          DisplayName: nickname,
-          User: user,
+          text: message,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          displayName: hostName,
+          user: user,
         });
       } else {
         // you are Guest
         console.log("Sending to ...." + roomOnwer);
 
         db.collection(roomOnwer + "-chat-room").add({
-          Text: message,
-          CreatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          DisplayName: guestName,
-          User: user,
+          text: message,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          displayName: guestName,
+          user: user,
         });
       }
     }
@@ -130,7 +162,7 @@ const RoomMessage = ({
   return (
     <>
       <div className="topNav">
-        <h5 className="topNav-header-1">
+        <h5 className="topNav-head er-1">
           {title}{" "}
           <span className="topNav-header-2">
             {member}/{capacity}
@@ -138,13 +170,13 @@ const RoomMessage = ({
         </h5>
       </div>
       <div className="chatRoom">
-        {/* <ScrollableFeed forceScroll="true" style={{ height: "100%" }}>
+        <ScrollableFeed forceScroll="true" style={{ height: "100%" }}>
           {messageList.map((message) => (
             <>
-              <Message {...message} key={{ ...message }.DisplayName} />
+              <Message {...message} name={{ ...message }.displayName} />
             </>
           ))}
-        </ScrollableFeed> */}
+        </ScrollableFeed>
       </div>
       <div className="InputBar">
         <button

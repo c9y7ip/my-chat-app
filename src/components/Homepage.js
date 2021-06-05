@@ -1,6 +1,6 @@
 // Import
 import React, { useState, useEffect } from "react";
-import { Button, Card, Col, Container, Row, label } from "react-bootstrap";
+import { Button, Col, Container, Row, label } from "react-bootstrap";
 import AddIcon from "@material-ui/icons/Add";
 import { Box, Fab, Grid } from "@material-ui/core";
 import { confirmAlert } from "react-confirm-alert";
@@ -18,11 +18,13 @@ import "firebase/auth";
 import "firebase/firestore";
 
 import RoomMessage from "./RoomMessage";
-import { set } from "date-fns";
 
 function Homepage() {
   const auth = firebase.auth();
   const db = firebase.firestore();
+  const [user, setUser] = useState("");
+  const [roomID, setRoomID] = useState("");
+  const [roomOnwer, setRoomOnwer] = useState("");
 
   const [showChatRoom, setShowChatRoom] = useState(false);
   const [createCheck, setCreateCheck] = useState(false);
@@ -30,13 +32,11 @@ function Homepage() {
   const [title, setTitle] = useState("");
   const [member, setMember] = useState(0);
   const [capacity, setCapacity] = useState(0);
-  const [nickname, setNickname] = useState("");
+
+  const [hostName, setNickname] = useState("");
   const [guestName, setGuestName] = useState("");
-  const [user, setUser] = useState("");
+
   const [chatRoomList, setChatRoomList] = useState([]);
-  const [messageList, setMessageList] = useState([]);
-  const [roomOnwer, setRoomOnwer] = useState("");
-  const [roomID, setRoomID] = useState("");
 
   useEffect(() => {
     signIn();
@@ -61,36 +61,7 @@ function Homepage() {
       setChatRoomList(chatRoom);
     });
 
-    //Reading Message
-    if (roomOnwer === "") {
-      console.log("Getting from user ..." + user);
-      const messageUnsub = db
-        .collection(user + "-chat-room")
-        .orderBy("CreatedAt", "asc")
-        .onSnapshot((querySnapshot) => {
-          const message = querySnapshot.docs.map((doc) => ({
-            ...doc.data(),
-            id: doc.id,
-          }));
-          setMessageList(message);
-          console.log(message);
-        });
-      return messageUnsub, chatRooUnsub, userUnsub;
-    } else {
-      console.log("Getting from roomOwner..." + roomOnwer);
-      const messageUnsub = db
-        .collection(roomOnwer + "-chat-room")
-        .orderBy("CreatedAt", "asc")
-        .onSnapshot((querySnapshot) => {
-          const message = querySnapshot.docs.map((doc) => ({
-            ...doc.data(),
-            id: doc.id,
-          }));
-          setMessageList(message);
-          console.log(message);
-        });
-      return messageUnsub, chatRooUnsub, userUnsub;
-    }
+    return [userUnsub, chatRooUnsub];
   }, [db, auth, roomOnwer, user]);
 
   const signIn = async () => {
@@ -105,8 +76,8 @@ function Homepage() {
         title +
         ", capacity=" +
         capacity +
-        ",nickname=" +
-        nickname,
+        ",hostName=" +
+        hostName,
       buttons: [
         {
           label: "No",
@@ -126,14 +97,15 @@ function Homepage() {
       await db
         .collection("chat-room-list")
         .add({
-          Title: title,
-          Capacity: capacity,
-          Owner: user,
-          Member: member + 1,
+          title: title,
+          capacity: capacity,
+          owner: user,
+          member: member + 1,
         })
         .then(function (doc) {
-          console.log("Room ID = ", doc.id);
           setRoomID(doc.id);
+          console.log("Room ID = " + roomID);
+
           setRoomOnwer(user);
           setMember(member + 1);
         });
@@ -142,8 +114,8 @@ function Homepage() {
         .collection(user + "-chat-room")
         .doc("private-message-meta")
         .set({
-          Owner: user,
-          DisplayName: nickname,
+          owner: user,
+          displayName: hostName,
         });
 
       console.log("Room created, Owner = " + user);
@@ -160,10 +132,9 @@ function Homepage() {
               //Show private chat room
               <RoomMessage
                 user={user}
-                nickname={nickname}
+                hostName={hostName}
                 title={title}
                 capacity={capacity}
-                messageList={messageList}
                 roomOnwer={roomOnwer}
                 guestName={guestName}
                 roomID={roomID}
@@ -199,9 +170,9 @@ function Homepage() {
                     ></input>
                   </p>
                   <p>
-                    Nickname{" "}
+                    hostName{" "}
                     <input
-                      placeholder="Nickname"
+                      placeholder="hostName"
                       onChange={(e) => {
                         setNickname(e.target.value);
                       }}
@@ -219,12 +190,11 @@ function Homepage() {
           <div className="grid">
             {chatRoomList.map((room) => (
               <Chatroom
-                key={room.id}
                 roomID={room.id}
-                title={room.Title}
-                capacity={room.Capacity}
-                member={room.Member}
-                owner={room.Owner}
+                title={room.title}
+                capacity={room.capacity}
+                member={room.member}
+                owner={room.owner}
                 setCreateCheck={setCreateCheck}
                 setTitle={setTitle}
                 setCapacity={setCapacity}

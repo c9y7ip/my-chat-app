@@ -26,34 +26,32 @@ const Chatroom = ({
   setRoomID = {},
 }) => {
   const db = firebase.firestore();
-  const [nickName, setNickName] = useState();
+  const [nickName, setNickName] = useState("");
 
   const incraseMember = async () => {
     setMember(member + 1);
-    console.log("Updating memeber ...", roomID);
+    console.log("Updating memeber with room ID...", roomID);
     try {
       await db
         .collection("chat-room-list")
         .doc(roomID)
         .update({
-          Member: member + 1,
+          member: member + 1,
         });
     } catch (e) {
       console.log(e);
     }
   };
 
-  const setUpName = () => {
-    const enterName = prompt("Enter your nickname");
-    setNickName(enterName);
-    joinChatRoom();
-  };
-
-  const joinChatRoom = () => {
+  const joinChatRoom = async () => {
     console.log("Room Onwer = " + owner);
+    var inputName = window.prompt("Enter your nickname");
+    console.log(inputName, "((((((((((((");
+    setNickName(inputName);
+
     incraseMember();
     confirmAlert({
-      title: "You want to join this room? Using name " + nickName,
+      title: "You want to join this room? Using name " + inputName,
 
       buttons: [
         {
@@ -67,6 +65,8 @@ const Chatroom = ({
             setCapacity(capacity);
             setRoomOnwer(owner);
             setRoomID(roomID);
+            setGuestName(inputName);
+            setNickName(inputName);
           },
         },
       ],
@@ -79,8 +79,8 @@ const Chatroom = ({
         <Card.Subtitle className="cardSubTitle">{title}</Card.Subtitle>
         <Card.Body className="cardBody">
           <p className="cardCapacity">
-            capacity # {member}/{capacity}
-            <Button onClick={setUpName} className="cardButton" variant="priamry">
+            Capacity # {member}/{capacity}
+            <Button onClick={joinChatRoom} className="cardButton" variant="priamry">
               Join
             </Button>
           </p>
