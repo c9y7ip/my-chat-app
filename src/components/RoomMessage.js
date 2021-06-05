@@ -30,7 +30,10 @@ const RoomMessage = ({
 
   const [message, setMessage] = useState("");
 
-  const signOut = async () => {
+  const creatorLeave = async () => {
+    console.log("Creator Leaving ..");
+    console.log("User = ", user);
+    console.log("RoomOwner = ", roomOnwer);
     try {
       await db.collection("chat-room-list").doc(roomID).delete();
       setCreateCheck(false);
@@ -43,7 +46,40 @@ const RoomMessage = ({
             e.ref.delete();
           });
         });
-      // await firebase.auth().signOut();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const decraseMember = async () => {
+    console.log("Updating memeber ...", roomID);
+    try {
+      await db
+        .collection("chat-room-list")
+        .doc(roomID)
+        .update({
+          Member: member - 1,
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const guestLeave = async () => {
+    console.log("Guest Leaving ..");
+    console.log("User = ", user);
+    console.log("RoomOwner = ", roomOnwer);
+    try {
+      decraseMember();
+      setCreateCheck(false);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const signOut = async () => {
+    try {
+      await firebase.auth().signOut();
       console.log("Sign Out!");
     } catch (e) {
       console.log(e);
@@ -95,7 +131,11 @@ const RoomMessage = ({
         </ScrollableFeed>
       </div>
       <div className="InputBar">
-        <button type="button" className="btn btn-danger btn-sm" onClick={signOut}>
+        <button
+          type="button"
+          className="btn btn-danger btn-sm"
+          onClick={user === roomOnwer ? creatorLeave : guestLeave}
+        >
           Leave
         </button>
         <input

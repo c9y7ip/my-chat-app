@@ -100,6 +100,7 @@ function Homepage() {
         .then(function (doc) {
           console.log("room ID = ", doc.id);
           setRoomID(doc.id);
+          setRoomOnwer(user);
         });
     }
 
@@ -217,6 +218,7 @@ function Homepage() {
                 setMember={setMember}
                 setRoomOnwer={setRoomOnwer}
                 setGuestName={setGuestName}
+                setRoomID={setRoomID}
               />
             ))}
           </div>
