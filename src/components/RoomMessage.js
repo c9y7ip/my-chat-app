@@ -56,7 +56,7 @@ const RoomMessage = ({
       if (roomOnwer == "") {
         console.log("sending to ...." + user);
 
-        db.collection(user + "-chat-room-list").add({
+        db.collection(user + "-chat-room").add({
           text: message,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           displayName: nickname,
