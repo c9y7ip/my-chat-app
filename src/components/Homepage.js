@@ -1,41 +1,47 @@
+// Import
 import React, { useState, useEffect } from "react";
-import { Button, Card, Col, Container, Row, label } from "react-bootstrap";
+import { Button, Col, Container, Row, label } from "react-bootstrap";
 import AddIcon from "@material-ui/icons/Add";
-import PersonIcon from "@material-ui/icons/Person";
-import "../style/homepage.css";
 import { Box, Fab, Grid } from "@material-ui/core";
+import { confirmAlert } from "react-confirm-alert";
+
+// components Import
 import Chatroom from "./Chatroom";
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+
+// CSS Import
+import "react-confirm-alert/src/react-confirm-alert.css";
+import "../style/homepage.css";
+
+// firebase Import
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import ReactScrollableList from "react-scrollable-list";
-import Message from "./old/Message";
+
 import RoomMessage from "./RoomMessage";
-import { CompassCalibrationOutlined } from "@material-ui/icons";
 
 function Homepage() {
   const auth = firebase.auth();
   const db = firebase.firestore();
+  const [user, setUser] = useState("");
+  const [roomID, setRoomID] = useState("");
+  const [roomOnwer, setRoomOnwer] = useState("");
 
-  const [switches, setSwitches] = useState(true);
+  const [showChatRoom, setShowChatRoom] = useState(false);
   const [createCheck, setCreateCheck] = useState(false);
-  const [message, setMessage] = useState("");
+
   const [title, setTitle] = useState("");
   const [member, setMember] = useState(0);
   const [capacity, setCapacity] = useState(0);
-  const [nickname, setNickname] = useState("");
+
+  const [hostName, setNickname] = useState("");
   const [guestName, setGuestName] = useState("");
-  const [user, setUser] = useState("");
+
   const [chatRoomList, setChatRoomList] = useState([]);
-  const [messageList, setMessageList] = useState([]);
-  const [roomOnwer, setRoomOnwer] = useState("");
-  const [roomID, setRoomID] = useState("");
 
   useEffect(() => {
     signIn();
 
+    //Update User Information
     const userUnsub = auth.onAuthStateChanged((firebaseUser) => {
       if (firebaseUser) {
         setUser(firebaseUser.uid);
@@ -46,74 +52,20 @@ function Homepage() {
       }
     });
 
+    //Update Chat Room List
     const chatRooUnsub = db.collection("chat-room-list").onSnapshot((querySnapshot) => {
       const chatRoom = querySnapshot.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
       }));
       setChatRoomList(chatRoom);
-      // console.log(chatRoom);
     });
 
-    if (roomOnwer == "") {
-      console.log("Getting from..." + user + " this is user");
-      const messageUnsub = db
-        .collection(user + "-chat-room")
-        .orderBy("createdAt", "asc")
-        .onSnapshot((querySnapshot) => {
-          const message = querySnapshot.docs.map((doc) => ({
-            ...doc.data(),
-            id: doc.id,
-          }));
-          setMessageList(message);
-          // console.log(message);
-        });
-      return chatRooUnsub, messageUnsub, userUnsub;
-    } else {
-      console.log("Getting from..." + roomOnwer + " this is roomOwner");
-      const messageUnsub = db
-        .collection(roomOnwer + "-chat-room")
-        .orderBy("createdAt", "asc")
-        .onSnapshot((querySnapshot) => {
-          const message = querySnapshot.docs.map((doc) => ({
-            ...doc.data(),
-            id: doc.id,
-          }));
-          setMessageList(message);
-          // console.log(message);
-        });
-      return chatRooUnsub, messageUnsub, userUnsub;
-    }
-  }, [db, roomOnwer, user]);
+    return [userUnsub, chatRooUnsub];
+  }, [db, auth, roomOnwer, user]);
 
-  const roomCreate = async () => {
-    console.log("creating...");
-    console.log();
-    if (db) {
-      db.collection("chat-room-list")
-        .add({
-          Title: title,
-          Capacity: capacity,
-          Owner: user,
-          Member: member + 1,
-        })
-        .then(function (doc) {
-          console.log("room ID = ", doc.id);
-          setRoomID(doc.id);
-          setRoomOnwer(user);
-        });
-    }
-
-    db.collection(user + "-chat-room")
-      .doc("private-message-meta")
-      .set({
-        Owner: user,
-        Nickname: nickname,
-      });
-
-    console.log("Finished, Owner = " + user);
-
-    setCreateCheck(true);
+  const signIn = async () => {
+    firebase.auth().signInAnonymously();
   };
 
   const roomInfoConfirm = () => {
@@ -124,8 +76,8 @@ function Homepage() {
         title +
         ", capacity=" +
         capacity +
-        ",nickname=" +
-        nickname,
+        ",hostName=" +
+        hostName,
       buttons: [
         {
           label: "No",
@@ -138,8 +90,37 @@ function Homepage() {
     });
   };
 
-  const signIn = async () => {
-    firebase.auth().signInAnonymously();
+  const roomCreate = async () => {
+    console.log("Creating Room ...");
+    setMember(member + 1);
+    if (db) {
+      await db
+        .collection("chat-room-list")
+        .add({
+          title: title,
+          capacity: capacity,
+          owner: user,
+          member: member + 1,
+        })
+        .then(function (doc) {
+          setRoomID(doc.id);
+          console.log("Room ID = " + roomID);
+
+          setRoomOnwer(user);
+          setMember(member + 1);
+        });
+
+      await db
+        .collection(user + "-chat-room")
+        .doc("private-message-meta")
+        .set({
+          owner: user,
+          displayName: hostName,
+        });
+
+      console.log("Room created, Owner = " + user);
+      setCreateCheck(true);
+    }
   };
 
   return (
@@ -148,25 +129,26 @@ function Homepage() {
         <Col>
           <div className="grid">
             {createCheck ? (
+              //Show private chat room
               <RoomMessage
                 user={user}
-                nickname={nickname}
+                hostName={hostName}
                 title={title}
                 capacity={capacity}
-                member={member}
-                messageList={messageList}
                 roomOnwer={roomOnwer}
                 guestName={guestName}
                 roomID={roomID}
                 setCreateCheck={setCreateCheck}
               />
-            ) : !switches ? (
+            ) : !showChatRoom ? (
+              //Create room button
               <Box className="addButton" display="flex" justifyContent="center" alignItems="center">
-                <Fab aria-label="add" color="primary" onClick={() => setSwitches(true)}>
+                <Fab aria-label="add" color="primary" onClick={() => setShowChatRoom(true)}>
                   <AddIcon />
                 </Fab>
               </Box>
             ) : (
+              //Show create room inforamtion (active by => setSwitches(true))
               <div className="room-profile">
                 <Box className="room-input">
                   <p>
@@ -188,9 +170,9 @@ function Homepage() {
                     ></input>
                   </p>
                   <p>
-                    Nickname{" "}
+                    hostName{" "}
                     <input
-                      placeholder="Nickname"
+                      placeholder="hostName"
                       onChange={(e) => {
                         setNickname(e.target.value);
                       }}
@@ -204,14 +186,15 @@ function Homepage() {
         </Col>
 
         <Col>
+          {/*Chat room list */}
           <div className="grid">
             {chatRoomList.map((room) => (
               <Chatroom
-                RoomId={room.id}
-                Title={room.Title}
-                Capacity={room.Capacity}
-                Member={room.Member}
-                Owner={room.Owner}
+                roomID={room.id}
+                title={room.title}
+                capacity={room.capacity}
+                member={room.member}
+                owner={room.owner}
                 setCreateCheck={setCreateCheck}
                 setTitle={setTitle}
                 setCapacity={setCapacity}

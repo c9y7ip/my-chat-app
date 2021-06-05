@@ -1,55 +1,57 @@
+//Import
 import React, { useState, useEffect } from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
-import firebase from "firebase/app";
+
+//CSS Import
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+
+//firebase Import
 import "firebase/auth";
 import "firebase/firestore";
-
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import firebase from "firebase/app";
 
 const Chatroom = ({
-  RoomId = "null",
-  Owner = "",
-  Title = "aloha",
-  Capacity = "0",
-  Member = 0,
+  roomID = "",
+  title = "",
+  capacity = 0,
+  member = 0,
+  owner = "",
   setCreateCheck = {},
   setTitle = {},
-  setCapacity = 0,
+  setCapacity = {},
   setMember = {},
   setRoomOnwer = {},
   setGuestName = {},
   setRoomID = {},
 }) => {
-  const [nickName, setNickName] = useState("123");
   const db = firebase.firestore();
-  // const [roomMember, setRoomMember] = useState(Member);
-
-  const setUpName = () => {
-    const enterName = prompt("Enter your nickname");
-    setGuestName(enterName);
-    joinChatRoom();
-  };
+  const [nickName, setNickName] = useState("");
 
   const incraseMember = async () => {
-    console.log("Updating memeber ...", RoomId);
+    setMember(member + 1);
+    console.log("Updating memeber with room ID...", roomID);
     try {
       await db
         .collection("chat-room-list")
-        .doc(RoomId)
+        .doc(roomID)
         .update({
-          Member: Member + 1,
+          member: member + 1,
         });
     } catch (e) {
       console.log(e);
     }
   };
 
-  const joinChatRoom = () => {
-    console.log("Room Onwer = " + Owner);
+  const joinChatRoom = async () => {
+    console.log("Room Onwer = " + owner);
+    var inputName = window.prompt("Enter your nickname");
+    console.log(inputName, "((((((((((((");
+    setNickName(inputName);
+
     incraseMember();
     confirmAlert({
-      title: "You want to join this room? Using name " + nickName,
+      title: "You want to join this room? Using name " + inputName,
 
       buttons: [
         {
@@ -59,11 +61,12 @@ const Chatroom = ({
           label: "Yes",
           onClick: () => {
             setCreateCheck(true);
-            setTitle(Title);
-            setCapacity(Capacity);
-            setMember(Member + 1);
-            setRoomOnwer(Owner);
-            setRoomID(RoomId);
+            setTitle(title);
+            setCapacity(capacity);
+            setRoomOnwer(owner);
+            setRoomID(roomID);
+            setGuestName(inputName);
+            setNickName(inputName);
           },
         },
       ],
@@ -73,14 +76,13 @@ const Chatroom = ({
   return (
     <div className="card-wrapper">
       <Card className="card">
-        <Card.Subtitle className="cardSubTitle">{Title}</Card.Subtitle>
+        <Card.Subtitle className="cardSubTitle">{title}</Card.Subtitle>
         <Card.Body className="cardBody">
           <p className="cardCapacity">
-            Capacity # {Member}/{Capacity}
-            <Button onClick={setUpName} className="cardButton" variant="priamry">
+            Capacity # {member}/{capacity}
+            <Button onClick={joinChatRoom} className="cardButton" variant="priamry">
               Join
             </Button>
-            {/* <p>{RoomId}</p> */}
           </p>
         </Card.Body>
       </Card>
