@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import homepage from "./components/Homepage";
 import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
 
 firebase.initializeApp({
   apiKey: "AIzaSyDIkqKdbwXYNATrLGYub6YFxSCuNlcQ0QQ",

@@ -11,6 +11,7 @@
     "confirm-alert": "^1.0.3",
     "date-fns": "^2.21.3",
     "firebase": "^8.6.3",
+    "firebase-admin": "^9.9.0",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.0",
     "react-chatbox-component": "0.0.5",

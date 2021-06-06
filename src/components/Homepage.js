@@ -1,6 +1,6 @@
 // Import
 import React, { useState, useEffect } from "react";
-import { Button, Col, Container, Row, label } from "react-bootstrap";
+import { Button, Col, Container, Row, label, Tab, Tabs } from "react-bootstrap";
 import AddIcon from "@material-ui/icons/Add";
 import { Box, Fab, Grid } from "@material-ui/core";
 import { confirmAlert } from "react-confirm-alert";
@@ -15,13 +15,13 @@ import "../style/homepage.css";
 // firebase Import
 import firebase from "firebase/app";
 import "firebase/auth";
-import "firebase/firestore";
 
 import RoomMessage from "./RoomMessage";
 
 function Homepage() {
   const auth = firebase.auth();
   const db = firebase.firestore();
+
   const [user, setUser] = useState("");
   const [roomID, setRoomID] = useState("");
   const [roomOnwer, setRoomOnwer] = useState("");
@@ -122,7 +122,6 @@ function Homepage() {
       setCreateCheck(true);
     }
   };
-
   return (
     <Container fluid>
       <Row>
