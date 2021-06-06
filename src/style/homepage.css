@@ -15,17 +15,17 @@
   height: 100%;
 }
 
-.card-wrapper {
+/* .card-wrapper {
   padding-top: 1vh;
-  padding-left: 25%;
-}
+  padding-left: 25;
+} */
 
-.card {
-  align-items: center;
+/* .card {
+  justify-content: center;
   border-radius: 25px;
   width: 20vw;
   height: 10vh;
-}
+} */
 
 .cardSubTitle {
   padding-top: 10px;
@@ -91,6 +91,40 @@
   height: 100%;
 }
 
-/* .feeded {
-  height: 80%;
-} */
+/* Layout 2.0 */
+
+.grid {
+  width: 30%;
+  margin: auto;
+  margin-top: 5vh;
+  opacity: 90%;
+}
+
+.grid::-webkit-scrollbar {
+  display: none;
+}
+.tabs {
+  justify-content: center;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  background-image: url("../resource/pic1.jpg");
+  background-size: 100% 100vh;
+  background-repeat: no-repeat;
+}
+
+.card-wrapper {
+  padding-top: 1vh;
+}
+
+.card {
+  align-items: center;
+  border-radius: 25px;
+  width: 20vw;
+  height: 10vh;
+  margin: auto;
+}

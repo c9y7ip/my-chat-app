@@ -1,12 +1,14 @@
 // Import
 import React, { useState, useEffect } from "react";
-import { Button, Col, Container, Row, label, Tab, Tabs } from "react-bootstrap";
+import { Button, Col, Container, Row, label, Tab, Tabs, Pagination } from "react-bootstrap";
 import AddIcon from "@material-ui/icons/Add";
 import { Box, Fab, Grid } from "@material-ui/core";
 import { confirmAlert } from "react-confirm-alert";
+import ScrollableFeed from "react-scrollable-feed";
 
 // components Import
 import Chatroom from "./Chatroom";
+import RoomMessage from "./RoomMessage";
 
 // CSS Import
 import "react-confirm-alert/src/react-confirm-alert.css";
@@ -15,8 +17,6 @@ import "../style/homepage.css";
 // firebase Import
 import firebase from "firebase/app";
 import "firebase/auth";
-
-import RoomMessage from "./RoomMessage";
 
 function Homepage() {
   const auth = firebase.auth();
@@ -123,9 +123,13 @@ function Homepage() {
     }
   };
   return (
-    <Container fluid>
-      <Row>
-        <Col>
+    <>
+      {/* <video autoPlay loop muted className="video-background">
+        <source src={video_bg} type="video/mp4" />
+      </video> */}
+
+      <Tabs defaultActiveKey="home" id="uncontrolled-tab-example" className="tabs">
+        <Tab eventKey="home" title="Home">
           <div className="grid">
             {createCheck ? (
               //Show private chat room
@@ -182,31 +186,115 @@ function Homepage() {
               </div>
             )}
           </div>
-        </Col>
-
-        <Col>
-          {/*Chat room list */}
+        </Tab>
+        <Tab eventKey="room-list" title="Room List">
           <div className="grid">
-            {chatRoomList.map((room) => (
-              <Chatroom
-                roomID={room.id}
-                title={room.title}
-                capacity={room.capacity}
-                member={room.member}
-                owner={room.owner}
-                setCreateCheck={setCreateCheck}
-                setTitle={setTitle}
-                setCapacity={setCapacity}
-                setMember={setMember}
-                setRoomOnwer={setRoomOnwer}
-                setGuestName={setGuestName}
-                setRoomID={setRoomID}
-              />
-            ))}
+            <ScrollableFeed forceScroll="true">
+              {chatRoomList.map((room) => (
+                <Chatroom
+                  roomID={room.id}
+                  title={room.title}
+                  capacity={room.capacity}
+                  member={room.member}
+                  owner={room.owner}
+                  setCreateCheck={setCreateCheck}
+                  setTitle={setTitle}
+                  setCapacity={setCapacity}
+                  setMember={setMember}
+                  setRoomOnwer={setRoomOnwer}
+                  setGuestName={setGuestName}
+                  setRoomID={setRoomID}
+                />
+              ))}
+            </ScrollableFeed>
           </div>
-        </Col>
-      </Row>
-    </Container>
+        </Tab>
+      </Tabs>
+    </>
+    // <Container fluid>
+    //   <Row>
+    //     <Col>
+    //       <div className="grid">
+    //         {createCheck ? (
+    //           //Show private chat room
+    //           <RoomMessage
+    //             user={user}
+    //             hostName={hostName}
+    //             title={title}
+    //             capacity={capacity}
+    //             roomOnwer={roomOnwer}
+    //             guestName={guestName}
+    //             roomID={roomID}
+    //             setCreateCheck={setCreateCheck}
+    //           />
+    //         ) : !showChatRoom ? (
+    //           //Create room button
+    //           <Box className="addButton" display="flex" justifyContent="center" alignItems="center">
+    //             <Fab aria-label="add" color="primary" onClick={() => setShowChatRoom(true)}>
+    //               <AddIcon />
+    //             </Fab>
+    //           </Box>
+    //         ) : (
+    //           //Show create room inforamtion (active by => setSwitches(true))
+    //           <div className="room-profile">
+    //             <Box className="room-input">
+    //               <p>
+    //                 Title{" "}
+    //                 <input
+    //                   placeholder="title"
+    //                   onChange={(e) => {
+    //                     setTitle(e.target.value);
+    //                   }}
+    //                 ></input>
+    //               </p>
+    //               <p>
+    //                 Capacity{" "}
+    //                 <input
+    //                   placeholder="0"
+    //                   onChange={(e) => {
+    //                     setCapacity(e.target.value);
+    //                   }}
+    //                 ></input>
+    //               </p>
+    //               <p>
+    //                 hostName{" "}
+    //                 <input
+    //                   placeholder="hostName"
+    //                   onChange={(e) => {
+    //                     setNickname(e.target.value);
+    //                   }}
+    //                 ></input>
+    //               </p>
+    //             </Box>
+    //             <Button onClick={roomInfoConfirm}>Craete</Button>
+    //           </div>
+    //         )}
+    //       </div>
+    //     </Col>
+
+    //     <Col>
+    //       {/*Chat room list */}
+    //       <div className="grid">
+    //         {chatRoomList.map((room) => (
+    //           <Chatroom
+    //             roomID={room.id}
+    //             title={room.title}
+    //             capacity={room.capacity}
+    //             member={room.member}
+    //             owner={room.owner}
+    //             setCreateCheck={setCreateCheck}
+    //             setTitle={setTitle}
+    //             setCapacity={setCapacity}
+    //             setMember={setMember}
+    //             setRoomOnwer={setRoomOnwer}
+    //             setGuestName={setGuestName}
+    //             setRoomID={setRoomID}
+    //           />
+    //         ))}
+    //       </div>
+    //     </Col>
+    //   </Row>
+    // </Container>
   );
 }
 
