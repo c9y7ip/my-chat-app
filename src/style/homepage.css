@@ -97,7 +97,7 @@
   width: 30%;
   margin: auto;
   margin-top: 5vh;
-  opacity: 90%;
+  opacity: 0.9;
 }
 
 .grid::-webkit-scrollbar {
