@@ -16,12 +16,10 @@ const Chatroom = ({
   roomID = "",
   title = "",
   capacity = 0,
-  member = 0,
   owner = "",
   setCreateCheck = {},
   setTitle = {},
   setCapacity = {},
-  setMember = {},
   setRoomOnwer = {},
   setGuestName = {},
   setRoomID = {},
@@ -29,9 +27,24 @@ const Chatroom = ({
 }) => {
   const db = firebase.firestore();
   const [nickName, setNickName] = useState("");
+  const [member, setMember] = useState();
+
+  useEffect(() => {
+    const updateNumber = db
+      .collection("chat-room-list")
+      .doc(roomID)
+      .get("member")
+      .then(function (doc) {
+        if (doc.exists) {
+          console.log(doc.data().member, "<<<<<<<<<<<<<<<<<<<");
+          setMember(doc.data().member);
+        } else {
+          setCreateCheck(false);
+        }
+      });
+  });
 
   const incraseMember = async () => {
-    setMember(member + 1);
     console.log("Updating memeber with room ID...", roomID);
     try {
       await db

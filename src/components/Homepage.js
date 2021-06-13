@@ -207,12 +207,10 @@ function Homepage() {
                   roomID={room.id}
                   title={room.title}
                   capacity={room.capacity}
-                  member={room.member}
                   owner={room.owner}
                   setCreateCheck={setCreateCheck}
                   setTitle={setTitle}
                   setCapacity={setCapacity}
-                  setMember={setMember}
                   setRoomOnwer={setRoomOnwer}
                   setGuestName={setGuestName}
                   setRoomID={setRoomID}
