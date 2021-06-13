@@ -83,9 +83,13 @@ const Chatroom = ({
           <p className="cardCapacity">
             Capacity # {member}/{capacity}
             {owner !== user ? (
-              <Button onClick={joinChatRoom} className="cardButton" variant="priamry">
-                Join
-              </Button>
+              member == capacity ? (
+                <p>Full</p>
+              ) : (
+                <Button onClick={joinChatRoom} className="cardButton" variant="priamry">
+                  Join
+                </Button>
+              )
             ) : (
               <p>Joined!</p>
             )}

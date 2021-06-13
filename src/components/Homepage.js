@@ -31,7 +31,7 @@ function Homepage() {
 
   const [title, setTitle] = useState("");
   const [member, setMember] = useState(0);
-  const [capacity, setCapacity] = useState(0);
+  const [capacity, setCapacity] = useState(2);
 
   const [hostName, setNickname] = useState("");
   const [guestName, setGuestName] = useState("");
@@ -167,7 +167,7 @@ function Homepage() {
                     Capacity{" "}
                     <input
                       type="number"
-                      placeholder="0"
+                      placeholder="2"
                       onChange={(e) => {
                         setCapacity(e.target.value);
                       }}
@@ -183,7 +183,17 @@ function Homepage() {
                     ></input>
                   </p>
                 </Box>
-                <Button onClick={roomInfoConfirm}>Craete</Button>
+                {capacity <= 0 || capacity > 10 ? (
+                  <>
+                    <p style={{ color: "red" }}>Capacity must between 0 and 10</p>
+
+                    <Button disabled onClick={roomInfoConfirm}>
+                      Craete
+                    </Button>
+                  </>
+                ) : (
+                  <Button onClick={roomInfoConfirm}>Craete</Button>
+                )}
               </div>
             )}
           </div>
