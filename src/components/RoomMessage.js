@@ -26,25 +26,27 @@ const RoomMessage = ({
 }) => {
   const db = firebase.firestore();
   const [message, setMessage] = useState("");
-  const [member, setMember] = useState(0);
   const [messageList, setMessageList] = useState([]);
-
+  const [member, setMember] = useState("");
+  const [inputTab, setInputTab] = useState();
   useEffect(() => {
-    console.log("Guest Name = ", guestName);
-    console.log("Host Name = ", hostName);
-
-    //Update capacity
-    const room = db
+    const updateNumber = db
       .collection("chat-room-list")
       .doc(roomID)
       .get("member")
       .then(function (doc) {
         if (doc.exists) {
+          console.log(doc.data().member, "<<<<<<<<<<<<<<<<<<<");
           setMember(doc.data().member);
         } else {
           setCreateCheck(false);
         }
       });
+  });
+
+  useEffect(() => {
+    console.log("Guest Name = ", guestName);
+    console.log("Host Name = ", hostName);
 
     //Reading Message
     if (roomOnwer === "") {
@@ -53,28 +55,28 @@ const RoomMessage = ({
         .collection(user + "-chat-room")
         .orderBy("createdAt", "asc")
         .onSnapshot((querySnapshot) => {
-          const message = querySnapshot.docs.map((doc) => ({
+          const msg = querySnapshot.docs.map((doc) => ({
             ...doc.data(),
             id: doc.id,
           }));
-          setMessageList(message);
+          setMessageList(msg);
         });
-      return [messageUnsub, room];
+      return messageUnsub;
     } else {
       console.log("Getting from roomOwner..." + roomOnwer);
       const messageUnsub = db
         .collection(roomOnwer + "-chat-room")
         .orderBy("createdAt", "asc")
         .onSnapshot((querySnapshot) => {
-          const message = querySnapshot.docs.map((doc) => ({
+          const msg = querySnapshot.docs.map((doc) => ({
             ...doc.data(),
             id: doc.id,
           }));
-          setMessageList(message);
+          setMessageList(msg);
         });
-      return [messageUnsub, room];
+      return messageUnsub;
     }
-  }, [db, roomOnwer, user, roomID, setCreateCheck]);
+  }, [db]);
 
   const signOut = async () => {
     try {
@@ -89,6 +91,7 @@ const RoomMessage = ({
     console.log("Creator Leaving ...");
     console.log("User = ", user);
     console.log("RoomOwner = ", roomOnwer);
+    signOut();
     try {
       await db.collection("chat-room-list").doc(roomID).delete();
       setCreateCheck(false);
@@ -113,6 +116,7 @@ const RoomMessage = ({
     try {
       decraseMember();
       setCreateCheck(false);
+      signOut();
     } catch (e) {
       console.log(e);
     }
@@ -134,6 +138,7 @@ const RoomMessage = ({
 
   const handleOnSubmitMessage = (e) => {
     e.preventDefault();
+    setMessage("");
     if (db) {
       // you are Host
       if (roomOnwer === user) {
@@ -148,7 +153,6 @@ const RoomMessage = ({
       } else {
         // you are Guest
         console.log("Sending to ...." + roomOnwer);
-
         db.collection(roomOnwer + "-chat-room").add({
           text: message,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -164,16 +168,21 @@ const RoomMessage = ({
       <div className="topNav">
         <h5 className="topNav-head er-1">
           {title}{" "}
-          <span className="topNav-header-2">
+          <p className="topNav-header-2">
             {member}/{capacity}
-          </span>
+          </p>
         </h5>
       </div>
       <div className="chatRoom">
         <ScrollableFeed forceScroll="true" style={{ height: "100%" }}>
           {messageList.map((message) => (
             <>
-              <Message {...message} name={{ ...message }.displayName} />
+              <Message
+                {...message}
+                name={{ ...message }.displayName}
+                messageOwner={{ ...message }.user}
+                user={user}
+              />
             </>
           ))}
         </ScrollableFeed>
@@ -188,12 +197,13 @@ const RoomMessage = ({
         </button>
         <input
           className="input"
+          value={message}
           onChange={(e) => {
             setMessage(e.target.value);
           }}
         ></input>
         <button
-          type="button"
+          type="reset"
           className="btn btn-success btn-sm sendButton"
           onClick={handleOnSubmitMessage}
         >

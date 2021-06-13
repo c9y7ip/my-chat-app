@@ -112,7 +112,7 @@
 }
 
 body {
-  background-image: url("../resource/pic1.jpg");
+  background-image: url("../resource/pic1-min.jpg");
   background-size: 100% 100vh;
   background-repeat: no-repeat;
 }
@@ -127,4 +127,27 @@ body {
   width: 20vw;
   height: 10vh;
   margin: auto;
+}
+
+.right-message,
+.right-nickname {
+  margin: 0;
+  padding-right: 8px;
+  text-align: right;
+}
+
+.right-nickname {
+  font-size: 10px;
+  text-decoration: underline;
+}
+
+.left-message,
+.left-nickname {
+  padding-left: 8px;
+  margin: 0;
+}
+
+.left-nickname {
+  font-size: 10px;
+  text-decoration: underline;
 }

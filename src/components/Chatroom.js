@@ -12,6 +12,7 @@ import "firebase/firestore";
 import firebase from "firebase/app";
 
 const Chatroom = ({
+  user = "",
   roomID = "",
   title = "",
   capacity = 0,
@@ -24,6 +25,7 @@ const Chatroom = ({
   setRoomOnwer = {},
   setGuestName = {},
   setRoomID = {},
+  setSelectTab = {},
 }) => {
   const db = firebase.firestore();
   const [nickName, setNickName] = useState("");
@@ -46,7 +48,6 @@ const Chatroom = ({
   const joinChatRoom = async () => {
     console.log("Room Onwer = " + owner);
     var inputName = window.prompt("Enter your nickname");
-    console.log(inputName, "((((((((((((");
     setNickName(inputName);
 
     incraseMember();
@@ -67,6 +68,7 @@ const Chatroom = ({
             setRoomID(roomID);
             setGuestName(inputName);
             setNickName(inputName);
+            setSelectTab("home");
           },
         },
       ],
@@ -80,9 +82,13 @@ const Chatroom = ({
         <Card.Body className="cardBody">
           <p className="cardCapacity">
             Capacity # {member}/{capacity}
-            <Button onClick={joinChatRoom} className="cardButton" variant="priamry">
-              Join
-            </Button>
+            {owner !== user ? (
+              <Button onClick={joinChatRoom} className="cardButton" variant="priamry">
+                Join
+              </Button>
+            ) : (
+              <p>Joined!</p>
+            )}
           </p>
         </Card.Body>
       </Card>

@@ -37,6 +37,7 @@ function Homepage() {
   const [guestName, setGuestName] = useState("");
 
   const [chatRoomList, setChatRoomList] = useState([]);
+  const [selectTab, setSelectTab] = useState("home");
 
   useEffect(() => {
     signIn();
@@ -92,7 +93,6 @@ function Homepage() {
 
   const roomCreate = async () => {
     console.log("Creating Room ...");
-    setMember(member + 1);
     if (db) {
       await db
         .collection("chat-room-list")
@@ -107,7 +107,6 @@ function Homepage() {
           console.log("Room ID = " + roomID);
 
           setRoomOnwer(user);
-          setMember(member + 1);
         });
 
       await db
@@ -124,11 +123,12 @@ function Homepage() {
   };
   return (
     <>
-      {/* <video autoPlay loop muted className="video-background">
-        <source src={video_bg} type="video/mp4" />
-      </video> */}
-
-      <Tabs defaultActiveKey="home" id="uncontrolled-tab-example" className="tabs">
+      <Tabs
+        activeKey={selectTab}
+        onSelect={(k) => setSelectTab(k)}
+        id="uncontrolled-tab-example"
+        className="tabs"
+      >
         <Tab eventKey="home" title="Home">
           <div className="grid">
             {createCheck ? (
@@ -157,7 +157,7 @@ function Homepage() {
                   <p>
                     Title{" "}
                     <input
-                      placeholder="title"
+                      placeholder="Title"
                       onChange={(e) => {
                         setTitle(e.target.value);
                       }}
@@ -166,6 +166,7 @@ function Homepage() {
                   <p>
                     Capacity{" "}
                     <input
+                      type="number"
                       placeholder="0"
                       onChange={(e) => {
                         setCapacity(e.target.value);
@@ -173,9 +174,9 @@ function Homepage() {
                     ></input>
                   </p>
                   <p>
-                    hostName{" "}
+                    Nickname{" "}
                     <input
-                      placeholder="hostName"
+                      placeholder="Nickname"
                       onChange={(e) => {
                         setNickname(e.target.value);
                       }}
@@ -192,6 +193,7 @@ function Homepage() {
             <ScrollableFeed forceScroll="true">
               {chatRoomList.map((room) => (
                 <Chatroom
+                  user={user}
                   roomID={room.id}
                   title={room.title}
                   capacity={room.capacity}
@@ -204,6 +206,7 @@ function Homepage() {
                   setRoomOnwer={setRoomOnwer}
                   setGuestName={setGuestName}
                   setRoomID={setRoomID}
+                  setSelectTab={setSelectTab}
                 />
               ))}
             </ScrollableFeed>
