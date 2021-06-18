@@ -172,36 +172,53 @@ function Homepage() {
             ) : (
               //Show create room inforamtion (active by => setSwitches(true))
               <div className="room-profile">
-                <Box className="room-input">
-                  <p>
-                    Title{" "}
-                    <input
-                      placeholder="Title"
-                      onChange={(e) => {
-                        setTitle(e.target.value);
-                      }}
-                    ></input>
-                  </p>
-                  <p>
-                    Capacity{" "}
-                    <input
-                      type="number"
-                      placeholder="2"
-                      onChange={(e) => {
-                        setCapacity(e.target.value);
-                      }}
-                    ></input>
-                  </p>
-                  <p>
-                    Nickname{" "}
-                    <input
-                      placeholder="Nickname"
-                      onChange={(e) => {
-                        setHostName(e.target.value);
-                      }}
-                    ></input>
-                  </p>
-                </Box>
+                <div className="container">
+                  <div className="row ">
+                    <div className="col-3">
+                      <p>Title</p>
+                    </div>
+                    <div className="col-3">
+                      {" "}
+                      <input
+                        placeholder="Title"
+                        onChange={(e) => {
+                          setTitle(e.target.value);
+                        }}
+                      ></input>
+                    </div>
+                  </div>
+
+                  <div className="row ">
+                    <div className="col-3">
+                      <p>Capacity</p>
+                    </div>
+                    <div className="col-3">
+                      {" "}
+                      <input
+                        type="number"
+                        placeholder="2"
+                        onChange={(e) => {
+                          setCapacity(e.target.value);
+                        }}
+                      ></input>
+                    </div>
+                  </div>
+
+                  <div className="row ">
+                    <div className="col-3">
+                      <p>Nickname</p>
+                    </div>
+                    <div className="col-3">
+                      {" "}
+                      <input
+                        placeholder="Nickname"
+                        onChange={(e) => {
+                          setHostName(e.target.value);
+                        }}
+                      ></input>
+                    </div>
+                  </div>
+                </div>
                 {capacity <= 0 || capacity > 10 ? (
                   <>
                     <p style={{ color: "red" }}>Capacity must between 0 and 10</p>

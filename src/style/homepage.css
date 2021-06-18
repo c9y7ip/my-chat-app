@@ -15,18 +15,6 @@
   height: 100%;
 }
 
-/* .card-wrapper {
-  padding-top: 1vh;
-  padding-left: 25;
-} */
-
-/* .card {
-  justify-content: center;
-  border-radius: 25px;
-  width: 20vw;
-  height: 10vh;
-} */
-
 .cardSubTitle {
   padding-top: 10px;
   padding-left: 20px;
@@ -150,4 +138,13 @@ body {
 .left-nickname {
   font-size: 11px;
   text-decoration: underline;
+}
+
+.container {
+  padding-top: 20vh;
+}
+]
+
+.row {
+  justify-content: center !important;
 }

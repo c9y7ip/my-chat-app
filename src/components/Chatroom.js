@@ -36,7 +36,7 @@ const Chatroom = ({
       .get("member")
       .then(function (doc) {
         if (doc.exists) {
-          console.log(doc.data().member, "<<<<<<<<<<<<<<<<<<<");
+          // console.log(doc.data().member, "<<<<<<<<<<<<<<<<<<<");
           setMember(doc.data().member);
         } else {
           setCreateCheck(false);
@@ -63,7 +63,6 @@ const Chatroom = ({
     console.log("Room Onwer = " + owner);
     var inputName = window.prompt("Enter your nickname");
     setNickName(inputName);
-
     incraseMember();
     confirmAlert({
       title: "You want to join this room? Using name " + inputName,

@@ -46,7 +46,7 @@ const RoomMessage = ({
       .get("member")
       .then(function (doc) {
         if (doc.exists) {
-          console.log(doc.data().member, "<<<<<<<<<<<<<<<<<<<");
+          // console.log(doc.data().member, "<<<<<<<<<<<<<<<<<<<");
           setMember(doc.data().member);
         } else {
           setCreateCheck(false);
