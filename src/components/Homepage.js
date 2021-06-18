@@ -33,7 +33,7 @@ function Homepage() {
   const [member, setMember] = useState(0);
   const [capacity, setCapacity] = useState(2);
 
-  const [hostName, setNickname] = useState("");
+  const [hostName, setHostName] = useState("");
   const [guestName, setGuestName] = useState("");
 
   const [chatRoomList, setChatRoomList] = useState([]);
@@ -46,10 +46,28 @@ function Homepage() {
     const userUnsub = auth.onAuthStateChanged((firebaseUser) => {
       if (firebaseUser) {
         setUser(firebaseUser.uid);
-        console.log("Login in as " + user);
+        console.log("Login in as: " + user);
+
+        db.collection("chat-room-list")
+          .where("owner", "==", user)
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              // console.log(doc.ref.id);
+              // console.log(doc.data());
+
+              setUser(user);
+              setHostName(doc.data().hostName);
+              setTitle(doc.data().title);
+              setCapacity(doc.data().capacity);
+              setRoomOnwer(doc.data().owner);
+              // setGuestName()
+              setRoomID(doc.ref.id);
+              setCreateCheck(true);
+            });
+          });
       } else {
         setUser(null);
-        console.log(user);
       }
     });
 
@@ -101,10 +119,11 @@ function Homepage() {
           capacity: capacity,
           owner: user,
           member: member + 1,
+          hostName: hostName,
         })
         .then(function (doc) {
           setRoomID(doc.id);
-          console.log("Room ID = " + roomID);
+          console.log("Room ID = " + doc.id);
 
           setRoomOnwer(user);
         });
@@ -114,7 +133,7 @@ function Homepage() {
         .doc("private-message-meta")
         .set({
           owner: user,
-          displayName: hostName,
+          hostName: hostName,
         });
 
       console.log("Room created, Owner = " + user);
@@ -178,7 +197,7 @@ function Homepage() {
                     <input
                       placeholder="Nickname"
                       onChange={(e) => {
-                        setNickname(e.target.value);
+                        setHostName(e.target.value);
                       }}
                     ></input>
                   </p>

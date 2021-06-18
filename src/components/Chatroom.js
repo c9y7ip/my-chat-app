@@ -27,7 +27,7 @@ const Chatroom = ({
 }) => {
   const db = firebase.firestore();
   const [nickName, setNickName] = useState("");
-  const [member, setMember] = useState();
+  const [member, setMember] = useState(0);
 
   useEffect(() => {
     const updateNumber = db
@@ -47,6 +47,7 @@ const Chatroom = ({
   const incraseMember = async () => {
     console.log("Updating memeber with room ID...", roomID);
     try {
+      console.log(member, " this + 1");
       await db
         .collection("chat-room-list")
         .doc(roomID)

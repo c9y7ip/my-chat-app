@@ -28,7 +28,17 @@ const RoomMessage = ({
   const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
   const [member, setMember] = useState("");
-  const [inputTab, setInputTab] = useState();
+
+  if (guestName !== "") {
+    window.onbeforeunload = async (event) => {
+      const e = event || window.event;
+      e.preventDefault();
+      if (e) {
+        await guestLeave();
+      }
+    };
+  }
+
   useEffect(() => {
     const updateNumber = db
       .collection("chat-room-list")
@@ -91,7 +101,6 @@ const RoomMessage = ({
     console.log("Creator Leaving ...");
     console.log("User = ", user);
     console.log("RoomOwner = ", roomOnwer);
-    signOut();
     try {
       await db.collection("chat-room-list").doc(roomID).delete();
       setCreateCheck(false);
@@ -104,6 +113,7 @@ const RoomMessage = ({
             e.ref.delete();
           });
         });
+      await signOut();
     } catch (e) {
       console.log(e);
     }
@@ -125,6 +135,7 @@ const RoomMessage = ({
   const decraseMember = async () => {
     console.log("Decrasing memeber ...", roomID);
     try {
+      console.log(member, " this - 1");
       await db
         .collection("chat-room-list")
         .doc(roomID)
@@ -137,7 +148,6 @@ const RoomMessage = ({
   };
 
   const handleOnSubmitMessage = (e) => {
-    e.preventDefault();
     setMessage("");
     if (db) {
       // you are Host
@@ -198,6 +208,11 @@ const RoomMessage = ({
         <input
           className="input"
           value={message}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              handleOnSubmitMessage();
+            }
+          }}
           onChange={(e) => {
             setMessage(e.target.value);
           }}
