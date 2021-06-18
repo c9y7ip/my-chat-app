@@ -207,7 +207,7 @@ function Homepage() {
                     <p style={{ color: "red" }}>Capacity must between 0 and 10</p>
 
                     <Button disabled onClick={roomInfoConfirm}>
-                      Craete
+                      Create
                     </Button>
                   </>
                 ) : (
