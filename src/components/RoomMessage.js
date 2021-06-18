@@ -135,7 +135,7 @@ const RoomMessage = ({
   const decraseMember = async () => {
     console.log("Decrasing memeber ...", roomID);
     try {
-      console.log(member, " this - 1");
+      // console.log(member, " this - 1");
       await db
         .collection("chat-room-list")
         .doc(roomID)
