@@ -52,7 +52,7 @@ const RoomMessage = ({
           setCreateCheck(false);
         }
       });
-  });
+  }, []);
 
   useEffect(() => {
     console.log("Guest Name = ", guestName);
