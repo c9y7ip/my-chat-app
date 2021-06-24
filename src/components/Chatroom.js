@@ -99,9 +99,9 @@ const Chatroom = ({
               member === capacity ? (
                 <p>Full</p>
               ) : (
-                <Button onClick={joinChatRoom} className="cardButton" variant="priamry">
+                <button onClick={joinChatRoom} className="cardButton" variant="priamry">
                   Join
-                </Button>
+                </button>
               )
             ) : (
               <p>Joined!</p>
