@@ -52,7 +52,7 @@ const RoomMessage = ({
           setCreateCheck(false);
         }
       });
-  }, []);
+  });
 
   useEffect(() => {
     console.log("Guest Name = ", guestName);
@@ -86,7 +86,7 @@ const RoomMessage = ({
         });
       return messageUnsub;
     }
-  }, [db]);
+  }, [db, roomOnwer]);
 
   const signOut = async () => {
     try {
