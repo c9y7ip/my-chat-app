@@ -1,8 +1,8 @@
 // Import
 import React, { useState, useEffect } from "react";
-import { Button, Col, Container, Row, label, Tab, Tabs, Pagination } from "react-bootstrap";
+import { Button, Tab, Tabs } from "react-bootstrap";
 import AddIcon from "@material-ui/icons/Add";
-import { Box, Fab, Grid } from "@material-ui/core";
+import { Box, Fab } from "@material-ui/core";
 import { confirmAlert } from "react-confirm-alert";
 import ScrollableFeed from "react-scrollable-feed";
 
@@ -30,7 +30,6 @@ function Homepage() {
   const [createCheck, setCreateCheck] = useState(false);
 
   const [title, setTitle] = useState("");
-  const [member, setMember] = useState(0);
   const [capacity, setCapacity] = useState(2);
 
   const [hostName, setHostName] = useState("");
@@ -118,7 +117,7 @@ function Homepage() {
           title: title,
           capacity: capacity,
           owner: user,
-          member: member + 1,
+          member: 1,
           hostName: hostName,
         })
         .then(function (doc) {
@@ -239,6 +238,7 @@ function Homepage() {
             <ScrollableFeed forceScroll="true">
               {chatRoomList.map((room) => (
                 <Chatroom
+                  key={room.id}
                   user={user}
                   roomID={room.id}
                   title={room.title}

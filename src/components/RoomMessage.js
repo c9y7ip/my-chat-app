@@ -1,8 +1,8 @@
 // Import
 import React, { useState, useEffect } from "react";
 import firebase from "firebase/app";
-
 import ScrollableFeed from "react-scrollable-feed";
+
 // Components Import
 import Message from "./Message";
 
@@ -52,6 +52,7 @@ const RoomMessage = ({
           setCreateCheck(false);
         }
       });
+    return updateNumber;
   });
 
   useEffect(() => {
@@ -86,7 +87,7 @@ const RoomMessage = ({
         });
       return messageUnsub;
     }
-  }, [db, roomOnwer]);
+  }, [db, roomOnwer, guestName, hostName, user]);
 
   const signOut = async () => {
     try {

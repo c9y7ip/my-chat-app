@@ -1,6 +1,6 @@
 //Import
 import React, { useState, useEffect } from "react";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 
 //CSS Import
 import { confirmAlert } from "react-confirm-alert";
@@ -26,7 +26,6 @@ const Chatroom = ({
   setSelectTab = {},
 }) => {
   const db = firebase.firestore();
-  const [nickName, setNickName] = useState("");
   const [member, setMember] = useState(0);
 
   useEffect(() => {
@@ -42,6 +41,7 @@ const Chatroom = ({
           setCreateCheck(false);
         }
       });
+    return updateNumber;
   });
 
   const incraseMember = async () => {
@@ -73,7 +73,6 @@ const Chatroom = ({
           {
             label: "Yes",
             onClick: () => {
-              setNickName(inputName);
               incraseMember();
               setCreateCheck(true);
               setTitle(title);
@@ -81,7 +80,6 @@ const Chatroom = ({
               setRoomOnwer(owner);
               setRoomID(roomID);
               setGuestName(inputName);
-              setNickName(inputName);
               setSelectTab("home");
             },
           },
@@ -95,10 +93,10 @@ const Chatroom = ({
       <Card className="card">
         <Card.Subtitle className="cardSubTitle">{title}</Card.Subtitle>
         <Card.Body className="cardBody">
-          <p className="cardCapacity">
+          <div className="cardCapacity">
             Capacity # {member}/{capacity}
             {owner !== user ? (
-              member == capacity ? (
+              member === capacity ? (
                 <p>Full</p>
               ) : (
                 <Button onClick={joinChatRoom} className="cardButton" variant="priamry">
@@ -108,7 +106,7 @@ const Chatroom = ({
             ) : (
               <p>Joined!</p>
             )}
-          </p>
+          </div>
         </Card.Body>
       </Card>
     </div>

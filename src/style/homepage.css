@@ -63,8 +63,12 @@
   float: right;
 }
 
+.btn {
+  width: 15%;
+}
 .input {
-  width: 60%;
+  display: inline-block;
+  width: 55%;
   margin-left: 10%;
 }
 
