@@ -62,30 +62,32 @@ const Chatroom = ({
   const joinChatRoom = async () => {
     console.log("Room Onwer = " + owner);
     var inputName = window.prompt("Enter your nickname");
-    setNickName(inputName);
-    incraseMember();
-    confirmAlert({
-      title: "You want to join this room? Using name " + inputName,
+    if (inputName != null) {
+      confirmAlert({
+        title: "You want to join this room? Using name " + inputName,
 
-      buttons: [
-        {
-          label: "No",
-        },
-        {
-          label: "Yes",
-          onClick: () => {
-            setCreateCheck(true);
-            setTitle(title);
-            setCapacity(capacity);
-            setRoomOnwer(owner);
-            setRoomID(roomID);
-            setGuestName(inputName);
-            setNickName(inputName);
-            setSelectTab("home");
+        buttons: [
+          {
+            label: "No",
           },
-        },
-      ],
-    });
+          {
+            label: "Yes",
+            onClick: () => {
+              setNickName(inputName);
+              incraseMember();
+              setCreateCheck(true);
+              setTitle(title);
+              setCapacity(capacity);
+              setRoomOnwer(owner);
+              setRoomID(roomID);
+              setGuestName(inputName);
+              setNickName(inputName);
+              setSelectTab("home");
+            },
+          },
+        ],
+      });
+    }
   };
 
   return (
